@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        file = new File(getFilesDir(), FILENAME);
         listView     = (ListView)    findViewById(R.id.listView);
         createButton = (Button)      findViewById(R.id.buttonCreate);
         loadButton   = (Button)      findViewById(R.id.buttonLoad);
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void create(View view) {
-        new FileCreatorTask().execute(file);
+        new FileCreatorTask().execute();
     }
 
     public void load(View view) {
@@ -79,11 +78,9 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setProgress(0);
     }
 
-    private class FileCreatorTask extends AsyncTask<File, Integer, Void> {
+    private class FileCreatorTask extends AsyncTask<Void, Integer, Void> {
         @Override
-        protected Void doInBackground(File... params) {
-            File file = params[0];
-
+        protected Void doInBackground(Void... params) {
             try {
                 FileOutputStream fos = new FileOutputStream(file);
                 for (int i = 1; i <= 10; i++) {
@@ -109,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
             disableButtons();
+            file = new File(getFilesDir(), FILENAME);
         }
 
         @Override
